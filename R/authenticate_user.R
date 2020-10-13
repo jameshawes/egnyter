@@ -19,7 +19,7 @@
 #' @param username user's Egnyte username
 #' @param password user's Egnyte password
 #' @export
-authenticate_user <- function(domain, app_key, username, password) {
+authenticate_user <- function(domain, app_key, app_secret, username, password) {
   # Check domain
   if(!validate_domain(domain)) {
     stop("Invalid Egnyte domain.",
@@ -47,7 +47,11 @@ authenticate_user <- function(domain, app_key, username, password) {
 
   # Create the url and body of the auth call
   authentication_url <- paste0(domain, "puboauth/token")
-  authentication_string <- paste0("client_id=", app_key, "&username=", username, "&password=", password, "&grant_type=password")
+  authentication_string <- paste0("client_id=", app_key,
+                                  "&client_secret=", app_secret,
+                                  "&username=", username,
+                                  "&password=", password,
+                                  "&grant_type=password")
 
   # Form the auth request
   auth_request <- httr::POST(
